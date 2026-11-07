@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist-pages/
+data/
+uploads/
+*.log
+*.pdf
+.env
+.env.local
+.claude/settings.local.json
