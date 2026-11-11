@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff3d9a"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="#08080c"/>
+  <rect width="512" height="512" rx="116" fill="none" stroke="url(#g)" stroke-width="10" opacity="0.55"/>
+  <text x="256" y="316" font-family="Arial Black, Arial, sans-serif" font-size="190" font-weight="900" text-anchor="middle" fill="url(#g)" letter-spacing="-6">XO</text>
+</svg>

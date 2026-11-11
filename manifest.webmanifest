@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "XOXO PARTY",
+  "short_name": "XOXO",
+  "description": "La carte du bar en direct, commande et notification quand c'est prêt.",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08080c",
+  "theme_color": "#08080c",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
