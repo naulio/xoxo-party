@@ -31,6 +31,8 @@ let rechecking = false
 
 const kioskListeners = new Set()
 export const onKioskEvent = fn => { kioskListeners.add(fn); return () => kioskListeners.delete(fn) }
+const shoppingListeners = new Set()
+export const onShoppingChanged = fn => { shoppingListeners.add(fn); return () => shoppingListeners.delete(fn) }
 
 export function connect() {
   socket?.disconnect()
@@ -57,6 +59,7 @@ export function connect() {
   socket.on('staff:state', staff => set({ staff: fixAssets(staff) }))
   socket.on('notify', e => toast(e.level, e.title, e.msg))
   socket.on('kiosk:event', e => kioskListeners.forEach(fn => fn(e)))
+  socket.on('shopping:changed', () => shoppingListeners.forEach(fn => fn()))
 }
 
 export const getSocket = () => socket

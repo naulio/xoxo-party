@@ -46,9 +46,9 @@ const withSlash = u => (u.endsWith('/') ? u : u + '/')
 const meta = () => {
   const urls = [`http://localhost:${PORT}`, ...lanUrls()]
   const pages = pagesUrl()
-  // Adresse à mettre dans les QR codes : le lien fixe GitHub dès que le
-  // tunnel tourne, sinon l'adresse locale (Wi-Fi de la soirée).
-  const appUrl = withSlash(publicUrl && pages ? pages : publicUrl || urls[1] || urls[0])
+  // Adresse à mettre dans les QR codes : le lien fixe GitHub une fois vérifié
+  // (il pointe bien sur ce serveur), sinon le tunnel, sinon le Wi-Fi local.
+  const appUrl = withSlash(publicUrl && pages && pagesLive ? pages : publicUrl || urls[1] || urls[0])
   return {
     urls, publicUrl, tunnel: !!publicUrl, pagesUrl: pages, pagesLive, appUrl,
     best: appUrl, dev: DEV,
@@ -140,7 +140,9 @@ async function announceOnGithub(url) {
   const r = await publishApiUrl(url)
   if (r.error) {
     console.error(`  ⚠  Lien fixe non mis à jour : ${r.error}`)
-    console.error(`     Le site reste joignable directement via ${url}`)
+    console.error('     (Le site est-il publié ? Lance publier-github.bat une fois.)')
+    console.log(`\n  ✅ EN LIGNE quand même, via l'adresse du tunnel (change à chaque redémarrage) :\n\n     ${url}\n`)
+    printQr(url)
     return
   }
   console.log('  ⏳ GitHub Pages se redéploie (20-90 s)…')

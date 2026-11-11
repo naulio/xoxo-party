@@ -1,11 +1,11 @@
 @echo off
 chcp 65001 >nul
-title XOXO PARTY - Serveur EN LIGNE (4G/5G + notifications)
+title XOXO PARTY - Serveur EN LIGNE (lien fixe + notifications)
 cd /d "%~dp0"
 
 echo.
 echo   XOXO PARTY - Demarrage EN LIGNE...
-echo   (accessible en 4G/5G + notifications push des commandes)
+echo   (lien fixe GitHub, 4G/5G, notifications push)
 echo.
 
 echo   Nettoyage des instances precedentes...
@@ -17,12 +17,9 @@ if not exist node_modules (
   call npm install --no-audit --no-fund
 )
 
-if not exist dist (
-  echo   Construction de l'application...
-  call npm run build
-)
+echo   Construction de l'application...
+call npm run build >nul 2>&1 || call npm run build
 
-start "" http://localhost:8787
 node server\index.js --tunnel
 
 pause

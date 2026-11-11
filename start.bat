@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 >nul
-title XOXO PARTY - Serveur local
+title XOXO PARTY - Serveur local (Wi-Fi)
 cd /d "%~dp0"
 
 echo.
-echo   XOXO PARTY - Demarrage (mode Wi-Fi local)...
+echo   XOXO PARTY - Demarrage (mode Wi-Fi local, sans lien fixe ni notifications)...
 echo.
 
 echo   Nettoyage des instances precedentes...
@@ -16,10 +16,8 @@ if not exist node_modules (
   call npm install --no-audit --no-fund
 )
 
-if not exist dist (
-  echo   Construction de l'application...
-  call npm run build
-)
+echo   Construction de l'application...
+call npm run build >nul 2>&1 || call npm run build
 
 start "" http://localhost:8787
 node server\index.js

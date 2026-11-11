@@ -9,6 +9,7 @@ import { publicState, staffState, snapshotForDiff, diffEvents, guestTotal, track
 import { computeQueue, learnFromOrder, ACTIVE } from './queue.js'
 import { issuePass, checkPass, passFromCode, consumePass } from './passes.js'
 import { pushToOrder, registerDeviceSub } from './push.js'
+import { computeShopping } from './shopping.js'
 
 const ORDER_STATUSES = ['pending', 'preparing', 'ready', 'served']
 const bad = (res, msg) => res.status(400).json({ error: msg })
@@ -796,6 +797,44 @@ export function registerApi(app, io, meta) {
       }
     })
     res.json({ ok: true })
+  })
+
+  // ---- Liste de courses (admin) ---------------------------------------------
+  // Partagée entre appareils : cocher sur un téléphone met à jour les autres.
+  const shoppingChanged = res => {
+    persist()
+    io.to('staff').emit('shopping:changed')
+    res.json(computeShopping(db()))
+  }
+
+  r.get('/shopping', requireAdmin, (req, res) => res.json(computeShopping(db())))
+
+  r.patch('/shopping/settings', requireAdmin, (req, res) => {
+    const b = req.body || {}
+    const st = db().shopping.settings
+    if (b.guests !== undefined) st.guests = Math.round(clamp(+b.guests || 1, 1, 1000))
+    if (b.drinksPerGuest !== undefined) st.drinksPerGuest = clamp(Math.round((+b.drinksPerGuest || 0) * 2) / 2, 0, 15)
+    if (b.margin !== undefined) st.margin = Math.round(clamp(+b.margin || 0, 0, 100))
+    if (b.deductStock !== undefined) st.deductStock = !!b.deductStock
+    shoppingChanged(res)
+  })
+
+  r.post('/shopping/line', requireAdmin, (req, res) => {
+    const { key, checked, qty, reset } = req.body || {}
+    if (!key || typeof key !== 'string' || key.length > 120) return bad(res, 'Ligne invalide')
+    const sh = db().shopping
+    if (checked !== undefined) { if (checked) sh.checked[key] = true; else delete sh.checked[key] }
+    if (qty !== undefined) sh.overrides[key] = Math.round(clamp(+qty || 0, 0, 999))
+    if (reset) delete sh.overrides[key]
+    shoppingChanged(res)
+  })
+
+  r.post('/shopping/reset', requireAdmin, (req, res) => {
+    const { checks = true, quantities = false } = req.body || {}
+    const sh = db().shopping
+    if (checks) sh.checked = {}
+    if (quantities) sh.overrides = {}
+    shoppingChanged(res)
   })
 
   // ---- Outils admin ---------------------------------------------------------

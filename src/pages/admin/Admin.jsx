@@ -1,5 +1,5 @@
 import { Routes, Route, NavLink, Navigate, Link } from 'react-router-dom'
-import { LayoutDashboard, Martini, Boxes, Users, Settings, LogOut, Eye, ClipboardList } from 'lucide-react'
+import { LayoutDashboard, Martini, Boxes, Users, Settings, LogOut, Eye, ClipboardList, ShoppingCart } from 'lucide-react'
 import { logout } from '../../store.js'
 import { ConnDot, cls } from '../../ui.jsx'
 import Dashboard from './Dashboard.jsx'
@@ -7,11 +7,13 @@ import Cocktails from './Cocktails.jsx'
 import Ingredients from './Ingredients.jsx'
 import UsersPage from './Users.jsx'
 import SettingsPage from './Settings.jsx'
+import Courses from './Courses.jsx'
 
 const LINKS = [
   { to: '/admin', end: true, label: 'Tableau de bord', icon: LayoutDashboard },
   { to: '/admin/cocktails', label: 'Cocktails', icon: Martini },
   { to: '/admin/ingredients', label: 'Ingrédients', icon: Boxes },
+  { to: '/admin/courses', label: 'Courses', icon: ShoppingCart },
   { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: Users },
   { to: '/admin/reglages', label: 'Réglages', icon: Settings },
 ]
@@ -44,6 +46,7 @@ export default function Admin() {
           <Route index element={<Dashboard />} />
           <Route path="cocktails" element={<Cocktails />} />
           <Route path="ingredients" element={<Ingredients />} />
+          <Route path="courses" element={<Courses />} />
           <Route path="utilisateurs" element={<UsersPage />} />
           <Route path="reglages" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />

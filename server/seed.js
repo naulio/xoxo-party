@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { id } from './db.js'
 import { hashPin } from './auth.js'
+import { SHOPPING_DEFAULTS } from './shopping.js'
 
 // Données initiales : ingrédients réalistes, vraie carte de cocktails,
 // quelques fiches invités et commandes de démonstration (supprimables
@@ -223,5 +224,10 @@ export function migrate(s) {
   for (const [k, v] of Object.entries(defaults)) {
     if (s.settings[k] === undefined) s.settings[k] = v
   }
-  s.settings.schema = 6
+  // v7 : liste de courses interactive (admin) — réglages, coches, quantités.
+  s.shopping = s.shopping || {}
+  s.shopping.settings = { ...SHOPPING_DEFAULTS, ...(s.shopping.settings || {}) }
+  s.shopping.checked = s.shopping.checked || {}
+  s.shopping.overrides = s.shopping.overrides || {}
+  s.settings.schema = 7
 }

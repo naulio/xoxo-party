@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["server/index.js", "--dev"],
       "port": 8787
+    },
+    {
+      "name": "pages-sim",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "preview", "--mode", "pages", "--port", "8790", "--strictPort"],
+      "port": 8790
     }
   ]
 }
